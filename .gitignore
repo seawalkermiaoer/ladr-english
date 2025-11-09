@@ -1,3 +1,13 @@
+
+
+gen-audio/.claude
+gen-audio/res
+gen-audio/tmp
+gen-audio/*.md
+gen-audio/*.json
+
+
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[codz]
