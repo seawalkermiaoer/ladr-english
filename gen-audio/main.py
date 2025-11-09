@@ -25,7 +25,7 @@ OPENAI_VOICE = "af_sky+af_bella"
 # Audio Processing Configuration
 INITIAL_SILENCE_SEC = 0.3  # 300ms
 GAP_DURATION_SEC = 0.5  # 500ms
-DISPLAY_BUFFER_SEC = 0.1  # ±100ms for display
+DISPLAY_BUFFER_SEC = 0.2  # 200ms for display
 
 # File Paths (will be set via command line args)
 DEFAULT_INPUT_FILE = "x1.json"
@@ -232,7 +232,7 @@ def step2_merge_audio(base_name):
         start_actual = t
         end_actual = t + duration
 
-        # Calculate display timing (with ±100ms buffer)
+        # Calculate display timing (with 200ms buffer)
         out_start_ms = start_actual - DISPLAY_BUFFER_SEC
         out_end_ms = end_actual + DISPLAY_BUFFER_SEC
         out_start_hhmmss_ms = sec_to_hhmmss_ms(out_start_ms)
@@ -257,7 +257,7 @@ def step2_merge_audio(base_name):
         logger.info(f"  Chinese: {chinese}")
         logger.info(f"  Duration: {duration:.3f}s")
         logger.info(f"  Actual timing: {start_actual:.3f}s - {end_actual:.3f}s")
-        logger.info(f"  Output display: {out_start_hhmmss_ms} ~ {out_end_hhmmss_ms} (with ±{DISPLAY_BUFFER_SEC*1000:.0f}ms buffer)")
+        logger.info(f"  Output display: {out_start_hhmmss_ms} ~ {out_end_hhmmss_ms} (with {DISPLAY_BUFFER_SEC*1000:.0f}ms buffer)")
         logger.info("")
 
         # Normalize sentence audio
