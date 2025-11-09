@@ -24,7 +24,8 @@ OPENAI_VOICE = "af_sky+af_bella"
 
 # Audio Processing Configuration
 INITIAL_SILENCE_SEC = 0.3  # 300ms
-GAP_DURATION_SEC = 0.5  # 500ms
+GAP_DURATION_SEC = 0.7  # 700ms
+GAP_BUFFER_SEC = 0.3  # ±300ms for gap timing
 DISPLAY_BUFFER_SEC = 0.2  # 200ms for display
 
 # File Paths (will be set via command line args)
@@ -188,7 +189,7 @@ def step2_merge_audio(base_name):
     Step 2: Calculate precise timestamps and merge audio files
 
     - Read res/{base_name}.step1.json
-    - Add 300ms initial silence and 500ms gaps between sentences
+    - Add 300ms initial silence and 700ms gaps between sentences
     - Normalize and merge all audio files
     - Convert to MP3 format
     - Generate res/{base_name}.step2.json and res/{base_name}.md
@@ -211,7 +212,7 @@ def step2_merge_audio(base_name):
     logger.info(f"Loaded {len(sentences)} sentences")
     logger.info("Configuration:")
     logger.info(f"  - Initial silence: {INITIAL_SILENCE_SEC*1000:.0f}ms")
-    logger.info(f"  - Gap between sentences: {GAP_DURATION_SEC*1000:.0f}ms")
+    logger.info(f"  - Gap between sentences: {GAP_DURATION_SEC*1000:.0f}ms (±{GAP_BUFFER_SEC*1000:.0f}ms)")
     logger.info(f"  - Display buffer: ±{DISPLAY_BUFFER_SEC*1000:.0f}ms")
     logger.info(f"  - Timestamp format: HH:MM:SS.mmm (millisecond precision)")
     logger.info("")
