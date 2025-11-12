@@ -47,8 +47,8 @@ class SupabaseClient:
             response = self.client.table("user").select("*").eq("token", token).execute()
             if response.data:
                 user_data = response.data[0]
-                user_id = user_data.get('id', 'unknown') if isinstance(user_data, dict) else getattr(user_data, 'id', 'unknown')
-                current_level = user_data.get('current_level', 'unknown') if isinstance(user_data, dict) else getattr(user_data, 'current_level', 'unknown')
+                user_id = user_data.get('id', '') if isinstance(user_data, dict) else getattr(user_data, 'id', '')
+                current_level = user_data.get('current_level', '') if isinstance(user_data, dict) else getattr(user_data, 'current_level', '')
                 logger.info(f"Token verified successfully for user ID: {user_id}, Current Level: {current_level}")
                 return user_data
             logger.info("Token verification failed - invalid token")
