@@ -1,3 +1,24 @@
+# vscode
+.vscode 
+
+# Intellij
+*.iml
+.idea
+# npm
+obsidian-word-gpt/node_modules
+# Don't include the compiled main.js file in the repo.
+# They should be uploaded to GitHub releases instead.
+obsidian-word-gpt/main.js
+# Exclude sourcemaps
+obsidian-word-gpt/*.map
+# obsidian
+obsidian-word-gpt/data.json
+obsidian-word-gpt/dist
+obsidian-word-gpt/obsidian-ai-providers
+obsidian-word-gpt/AGENTS.md
+obsidian-word-gpt/.kilocodemodes
+obsidian-word-gpt/*.ps1
+
 
 
 gen-audio/.claude
