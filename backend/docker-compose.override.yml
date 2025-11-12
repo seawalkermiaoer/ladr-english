@@ -1,0 +1,6 @@
+version: '3.8'
+
+services:
+  app:
+    environment:
+      - WORD_ALLOWED_ORIGINS=http://localhost:3000,http://localhost:8000

@@ -4,15 +4,18 @@ import os
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-from app.db import init_db
-from app.routers.words import router as words_router
-from app.routers.auth import router as auth_router
+# Load environment variables from .env file
+from dotenv import load_dotenv
+load_dotenv()
+
+from app.core.config import settings
+from app.api.v1.api import router as api_v1_router
 
 
 def _allowed_origins() -> list[str]:
     """Return allowed CORS origins. Defaults to localhost for dev."""
 
-    origins = os.environ.get("WORD_ALLOWED_ORIGINS")
+    origins = settings.CORS_ALLOWED_ORIGINS
     if origins:
         return [o.strip() for o in origins.split(",") if o.strip()]
     return [
@@ -28,10 +31,7 @@ def _allowed_origins() -> list[str]:
     ]
 
 
-app = FastAPI(title="Obsidian Word GPT Backend", version="0.1.0")
-
-# Initialize database tables.
-init_db()
+app = FastAPI(title=settings.PROJECT_NAME, version=settings.PROJECT_VERSION)
 
 # CORS for local development with Obsidian/electron-like environments.
 app.add_middleware(
@@ -48,5 +48,4 @@ def health():
     return {"status": "ok"}
 
 
-app.include_router(words_router)
-app.include_router(auth_router)
+app.include_router(api_v1_router)

@@ -54,5 +54,5 @@ export async function getStats(): Promise<StatsResponse> {
 }
 
 export async function verify(): Promise<{ ok: boolean; token: string }> {
-  return request<{ ok: boolean; token: string }>("/api/verify", { method: "GET" });
+  return request<{ ok: boolean; token: string }>("/api/v1/verify", { method: "GET" });
 }
