@@ -1,8 +1,8 @@
 import { ItemView, WorkspaceLeaf, MarkdownView, TFile, Editor, Menu, Notice } from 'obsidian';
-import FileInfo from './components/FileInfo.svelte';
+import FileInfo from './components/word.svelte';
 import MyPlugin from '../main';
 
-export const VIEW_TYPE_EXAMPLE = 'example-view';
+export const VIEW_TYPE_WORDGPT = 'word-gpt-view';
 
 interface FileInfoData {
   fileName: string;
@@ -41,7 +41,7 @@ export class ExampleView extends ItemView {
   }
 
   getViewType() {
-    return VIEW_TYPE_EXAMPLE;
+    return VIEW_TYPE_WORDGPT;
   }
 
   getDisplayText() {

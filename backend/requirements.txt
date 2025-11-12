@@ -1,0 +1,9 @@
+fastapi>=0.110
+uvicorn>=0.23
+pydantic>=2.0
+sqlalchemy>=2.0
+pytest>=7.0
+httpx>=0.24
+pytest-cov>=4.1
+requests>=2.31
+supabase>=2.4

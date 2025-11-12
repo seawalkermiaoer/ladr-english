@@ -1,3 +1,11 @@
+backend/.*
+backend/*.md
+backend/*.ps1
+backend/*.json
+
+*.trae
+
+
 # vscode
 .vscode 
 
@@ -18,6 +26,8 @@ obsidian-word-gpt/obsidian-ai-providers
 obsidian-word-gpt/AGENTS.md
 obsidian-word-gpt/.kilocodemodes
 obsidian-word-gpt/*.ps1
+obsidian-word-gpt/coverage
+obsidian-word-gpt/AGENTS.md
 
 
 

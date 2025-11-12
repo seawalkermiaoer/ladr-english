@@ -1,5 +1,5 @@
 import { App, Editor, MarkdownView, Menu, Modal, Notice, Plugin, PluginSettingTab, Setting, WorkspaceLeaf } from 'obsidian';
-import { ExampleView, VIEW_TYPE_EXAMPLE } from './views/sample_view';
+import { ExampleView, VIEW_TYPE_WORDGPT } from './views/word_gpt_vewi';
 import { LoginSettingTab } from './settings';
 
 // Remember to rename these classes and interfaces!
@@ -8,10 +8,12 @@ interface MyPluginSettings {
 	token?: string;
 	username?: string;
 	level?: 'free' | 'plus' | 'pro';
+  serverUrl?: string;
 }
 
 const DEFAULT_SETTINGS: MyPluginSettings = {
-	mySetting: 'default'
+	mySetting: 'default',
+  serverUrl: 'http://127.0.0.1:8000'
 }
 
 export default class MyPlugin extends Plugin {
@@ -21,10 +23,10 @@ export default class MyPlugin extends Plugin {
 		await this.loadSettings();
 
 		// Register the view
-		this.registerView(
-			VIEW_TYPE_EXAMPLE,
-			(leaf) => new ExampleView(leaf, this)
-		);
+    this.registerView(
+      VIEW_TYPE_WORDGPT,
+      (leaf) => new ExampleView(leaf, this)
+    );
 
 		// This adds a simple command that can be triggered anywhere
 		this.addCommand({
@@ -84,7 +86,7 @@ export default class MyPlugin extends Plugin {
 
 	onunload() {
 		// Clean up the view when the plugin is unloaded
-		this.app.workspace.detachLeavesOfType(VIEW_TYPE_EXAMPLE);
+		this.app.workspace.detachLeavesOfType(VIEW_TYPE_WORDGPT);
 	}
 
 	async loadSettings() {
@@ -107,7 +109,7 @@ export default class MyPlugin extends Plugin {
 		const { workspace } = this.app;
 
 		let leaf: WorkspaceLeaf | null = null;
-		const leaves = workspace.getLeavesOfType(VIEW_TYPE_EXAMPLE);
+    const leaves = workspace.getLeavesOfType(VIEW_TYPE_WORDGPT);
 
 		if (leaves.length > 0) {
 			leaf = leaves[0];
@@ -116,7 +118,7 @@ export default class MyPlugin extends Plugin {
 			// in the right sidebar for it
 			leaf = workspace.getRightLeaf(false);
 			if (leaf) {
-				await leaf.setViewState({ type: VIEW_TYPE_EXAMPLE, active: true });
+        await leaf.setViewState({ type: VIEW_TYPE_WORDGPT, active: true });
 			}
 		}
 
