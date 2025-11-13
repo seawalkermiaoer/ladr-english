@@ -1,4 +1,4 @@
-backend/.*
+backend/.env
 backend/*.md
 backend/*.ps1
 backend/*.json
