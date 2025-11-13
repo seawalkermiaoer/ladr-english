@@ -1,6 +1,6 @@
 import { App, PluginSettingTab, Setting, Notice } from "obsidian";
 import MyPlugin from "./main";
-import { setBaseUrl, setToken, verify } from "./api";
+import { setToken, getUserInfo, UserInfo } from "./api";
 
 export class LoginSettingTab extends PluginSettingTab {
   plugin: MyPlugin;
@@ -20,22 +20,16 @@ export class LoginSettingTab extends PluginSettingTab {
     if (this.plugin.settings.token) {
       containerEl.createEl("p", { text: `已登录（Token 已设置）` });
       
-      // Display user level if available
-      if (this.plugin.settings.level) {
-        const levelText = this.plugin.settings.level === 'free' ? '免费版' : 
-                         this.plugin.settings.level === 'plus' ? 'Plus版' : '专业版';
+      // Display user level and last update time if available
+      if (this.plugin.settings.userInfo) {
+        const levelText = this.plugin.settings.userInfo.current_level === 'free' ? '免费版' : 
+                         this.plugin.settings.userInfo.current_level === 'plus' ? 'Plus版' : '专业版';
         containerEl.createEl("p", { text: `用户等级：${levelText}` });
+        
+        // Format the last update time for better readability
+        const updatedAt = new Date(this.plugin.settings.userInfo.updated_at);
+        containerEl.createEl("p", { text: `最后更新：${updatedAt.toLocaleString()}` });
       }
-
-      new Setting(containerEl)
-        .setName("服务器地址")
-        .setDesc("例如 http://127.0.0.1:8000")
-        .addText((text) => {
-          text
-            .setPlaceholder("http://127.0.0.1:8000")
-            .setValue(this.plugin.settings.serverUrl || "")
-            .onChange((value) => (this.plugin.settings.serverUrl = value));
-        });
 
       new Setting(containerEl)
         .setName("Token")
@@ -49,17 +43,25 @@ export class LoginSettingTab extends PluginSettingTab {
       new Setting(containerEl)
         .addButton((btn) =>
           btn
-            .setButtonText("保存并校验")
+            .setButtonText("保存并获取用户信息")
             .setCta()
             .onClick(async () => {
               try {
                 await this.plugin.saveSettings();
-                setBaseUrl(this.plugin.settings.serverUrl || "");
+                // Check if token is provided
+                if (!this.plugin.settings.token || this.plugin.settings.token.trim() === "") {
+                  new Notice("请输入有效的 Token");
+                  return;
+                }
                 setToken(this.plugin.settings.token || "");
-                const res = await verify();
-                new Notice(`验证成功：${res.token}`);
+                const userInfo: UserInfo = await getUserInfo();
+                // Store the full user info response
+                this.plugin.settings.userInfo = userInfo;
+                await this.plugin.saveSettings();
+                new Notice(`用户信息获取成功`);
+                this.display();
               } catch (err: any) {
-                new Notice(`校验失败：${err.message}`);
+                new Notice(`获取用户信息失败：${err.message}`);
               }
             })
         );
@@ -78,16 +80,8 @@ export class LoginSettingTab extends PluginSettingTab {
       return;
     }
 
-    // 未登录：提供服务器地址与 Token 录入
-    let serverUrl = this.plugin.settings.serverUrl || "http://127.0.0.1:8000";
+    // 未登录：提供 Token 录入
     let token = "";
-
-    new Setting(containerEl)
-      .setName("服务器地址")
-      .setDesc("例如 http://127.0.0.1:8000")
-      .addText((text) => {
-        text.setPlaceholder("http://127.0.0.1:8000").setValue(serverUrl).onChange((value) => (serverUrl = value));
-      });
 
     new Setting(containerEl)
       .setName("Token")
@@ -98,20 +92,26 @@ export class LoginSettingTab extends PluginSettingTab {
     new Setting(containerEl)
       .addButton((btn) =>
         btn
-          .setButtonText("保存并校验")
+          .setButtonText("保存并获取用户信息")
           .setCta()
           .onClick(async () => {
             try {
-              this.plugin.settings.serverUrl = serverUrl;
+              // Check if token is provided
+              if (!token || token.trim() === "") {
+                new Notice("请输入有效的 Token");
+                return;
+              }
               this.plugin.settings.token = token;
               await this.plugin.saveSettings();
-              setBaseUrl(serverUrl);
               setToken(token);
-              const res = await verify();
-              new Notice(`验证成功：${res.token}`);
+              const userInfo: UserInfo = await getUserInfo();
+              // Store the full user info response
+              this.plugin.settings.userInfo = userInfo;
+              await this.plugin.saveSettings();
+              new Notice(`用户信息获取成功`);
               this.display();
             } catch (err: any) {
-              new Notice(`校验失败：${err.message}`);
+              new Notice(`获取用户信息失败：${err.message}`);
             }
           })
       );

@@ -6,13 +6,19 @@ export interface StatsResponse {
   due_today: number;
 }
 
-let BASE_URL = "";
-let TOKEN = "";
-
-/** 设置基础 URL，如 http://127.0.0.1:8000 */
-export function setBaseUrl(url: string): void {
-  BASE_URL = url?.replace(/\/$/, "") || "";
+export interface UserInfo {
+  id: number;
+  name: string;
+  created_at: string;
+  openid: string;
+  current_level: string;
+  token: string;
+  updated_at: string;
 }
+
+// Set the base URL directly since it's fixed
+const BASE_URL = "https://jrwhb5.faas.xiaoduoai.com";
+let TOKEN = "";
 
 /** 设置 Bearer Token */
 export function setToken(token: string): void {
@@ -21,7 +27,6 @@ export function setToken(token: string): void {
 
 /** 统一请求封装，自动附加 Authorization 头 */
 export async function request<T>(path: string, init: RequestInit = {}): Promise<T> {
-  if (!BASE_URL) throw new Error("服务地址未配置");
   const url = `${BASE_URL}${path.startsWith("/") ? path : "/" + path}`;
 
   const headers: Record<string, string> = {
@@ -43,16 +48,7 @@ export async function request<T>(path: string, init: RequestInit = {}): Promise<
   return {} as T;
 }
 
-/** 健康检查（无需 Token） */
-export async function getHealth(): Promise<{ status: string }> {
-  return request<{ status: string }>("/health", { method: "GET" });
-}
-
-/** 词库统计（需 Token） */
-export async function getStats(): Promise<StatsResponse> {
-  return request<StatsResponse>("/api/stats", { method: "GET" });
-}
-
-export async function verify(): Promise<{ ok: boolean; token: string }> {
-  return request<{ ok: boolean; token: string }>("/api/v1/verify", { method: "GET" });
+/** 获取用户信息 */
+export async function getUserInfo(): Promise<UserInfo> {
+  return request<UserInfo>("/ladr-user-info", { method: "GET" });
 }

@@ -214,9 +214,9 @@ export class ExampleView extends ItemView {
     
     // Get user level text
     let userLevelText = '';
-    if (this.plugin.settings.level) {
-      userLevelText = this.plugin.settings.level === 'free' ? '免费版' : 
-                     this.plugin.settings.level === 'plus' ? 'Plus版' : '专业版';
+    if (this.plugin.settings.userInfo) {
+      userLevelText = this.plugin.settings.userInfo.current_level === 'free' ? '免费版' : 
+                     this.plugin.settings.userInfo.current_level === 'plus' ? 'Plus版' : '专业版';
     }
     
     // Update the current file info with selected words and vocabulary words
@@ -248,9 +248,9 @@ export class ExampleView extends ItemView {
       
       // Get user level text
       let userLevelText = '';
-      if (this.plugin.settings.level) {
-        userLevelText = this.plugin.settings.level === 'free' ? '免费版' : 
-                       this.plugin.settings.level === 'plus' ? 'Plus版' : '专业版';
+      if (this.plugin.settings.userInfo) {
+        userLevelText = this.plugin.settings.userInfo.current_level === 'free' ? '免费版' : 
+                       this.plugin.settings.userInfo.current_level === 'plus' ? 'Plus版' : '专业版';
       }
       
       // If we have a last active file path, check if it's still open in the editor
@@ -342,9 +342,9 @@ export class ExampleView extends ItemView {
       
       // Get user level text for error case
       let userLevelText = '';
-      if (this.plugin.settings.level) {
-        userLevelText = this.plugin.settings.level === 'free' ? '免费版' : 
-                       this.plugin.settings.level === 'plus' ? 'Plus版' : '专业版';
+      if (this.plugin.settings.userInfo) {
+        userLevelText = this.plugin.settings.userInfo.current_level === 'free' ? '免费版' : 
+                       this.plugin.settings.userInfo.current_level === 'plus' ? 'Plus版' : '专业版';
       }
       
       this.currentFileInfo = {

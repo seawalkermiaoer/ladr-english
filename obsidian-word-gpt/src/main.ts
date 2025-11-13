@@ -6,14 +6,19 @@ import { LoginSettingTab } from './settings';
 interface MyPluginSettings {
 	mySetting: string;
 	token?: string;
-	username?: string;
-	level?: 'free' | 'plus' | 'pro';
-  serverUrl?: string;
+	userInfo?: {
+		id: number;
+		name: string;
+		created_at: string;
+		openid: string;
+		current_level: string;
+		token: string;
+		updated_at: string;
+	};
 }
 
 const DEFAULT_SETTINGS: MyPluginSettings = {
-	mySetting: 'default',
-  serverUrl: 'http://127.0.0.1:8000'
+	mySetting: 'default'
 }
 
 export default class MyPlugin extends Plugin {
@@ -99,8 +104,7 @@ export default class MyPlugin extends Plugin {
 	
 	logout() {
 		this.settings.token = undefined;
-		this.settings.username = undefined;
-		this.settings.level = undefined;
+		this.settings.userInfo = undefined;
 		this.saveSettings();
 	}
 	
