@@ -16,6 +16,22 @@ export interface UserInfo {
   updated_at: string;
 }
 
+// Article word interfaces
+export interface ArticleWord {
+  id: number;
+  openid: string;
+  word: string;
+  definition: string;
+  ai_memory: string;
+  created_at: string;
+}
+
+export interface ArticleWordListResponse {
+  openid: string;
+  article_id: string;
+  words: ArticleWord[];
+}
+
 // Set the base URL directly since it's fixed
 const BASE_URL = "https://jrwhb5.faas.xiaoduoai.com";
 let TOKEN = "";
@@ -51,4 +67,28 @@ export async function request<T>(path: string, init: RequestInit = {}): Promise<
 /** 获取用户信息 */
 export async function getUserInfo(): Promise<UserInfo> {
   return request<UserInfo>("/ladr-user-info", { method: "GET" });
+}
+
+/** 获取文章单词列表 */
+export async function getArticleWordList(openid: string, article_id: string): Promise<ArticleWordListResponse> {
+  return request<ArticleWordListResponse>("/ladr-article-word-list", {
+    method: "POST",
+    body: JSON.stringify({ openid, article_id })
+  });
+}
+
+/** 插入单词到文章 */
+export async function insertArticleWord(openid: string, article_id: string, word: string): Promise<any> {
+  return request<any>("/ladr-article-insert-word", {
+    method: "POST",
+    body: JSON.stringify({ openid, article_id, word })
+  });
+}
+
+/** 从文章中移除单词 */
+export async function removeArticleWord(openid: string, article_id: string, word: string): Promise<any> {
+  return request<any>("/ladr-article-remove-word", {
+    method: "POST",
+    body: JSON.stringify({ openid, article_id, word })
+  });
 }
